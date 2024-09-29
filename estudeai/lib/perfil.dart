@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 const Text(
-                  'ESTUDAI',
+                  'ESTUDE.AI',
                   style: TextStyle(
                     color: Colors.white, 
                     fontWeight: FontWeight.bold,
