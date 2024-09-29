@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'quiz_detail_page.dart'; // Importing the file quiz_detail_page.dart to use the Quiz class
+import 'quiz_detail_page.dart';
+import 'perfil.dart';
+import 'home.dart';
 // ignore_for_file: prefer_const_constructors
 
 void main() {
@@ -80,7 +82,12 @@ class _QuizPageState extends State<QuizPage> {
             icon: Icon(
               Icons.account_circle,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
           ),
         ],
         backgroundColor: Colors.teal,
@@ -97,11 +104,16 @@ class _QuizPageState extends State<QuizPage> {
               child: Text('Menu'),
             ),
             ListTile(
-              title: Text('Calendário'),
-              onTap: () {},
+              title: Text('Home Page'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
             ),
             ListTile(
-              title: Text('Grupos'),
+              title: Text('Calendário'),
               onTap: () {},
             ),
           ],

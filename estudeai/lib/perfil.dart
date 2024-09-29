@@ -1,4 +1,6 @@
+import 'package:estudeai/home.dart';
 import 'package:flutter/material.dart';
+import 'quiz.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,22 +25,18 @@ class ProfilePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF26A69A), 
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xFF26A69A),
         title: Stack(
-          alignment: Alignment.center, 
+          alignment: Alignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white), 
-                  onPressed: () {
-                  },
-                ),
                 const Text(
                   'ESTUDE.AI',
                   style: TextStyle(
-                    color: Colors.white, 
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
@@ -48,7 +46,7 @@ class ProfilePage extends StatelessWidget {
             const Text(
               'Perfil',
               style: TextStyle(
-                color: Colors.white, 
+                color: Colors.white,
                 fontWeight: FontWeight.w400,
                 fontSize: 20,
               ),
@@ -56,7 +54,42 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.white, 
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.teal,
+              ),
+              child: Text('Menu'),
+            ),
+            ListTile(
+              title: Text('Home Page'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Calendário'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text('Quiz'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuizPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -70,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.teal[700]!.withOpacity(.5), 
+                    color: Colors.teal[700]!.withOpacity(.5),
                     width: 5.0,
                   ),
                 ),
@@ -84,17 +117,17 @@ class ProfilePage extends StatelessWidget {
                 height: 10,
               ),
               SizedBox(
-                width: size.width * .8, 
+                width: size.width * .8,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center, 
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center, 
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
                           'João Vítor',
                           style: TextStyle(
-                            color: Colors.black, 
+                            color: Colors.black,
                             fontSize: 20,
                           ),
                         ),
@@ -125,6 +158,11 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfilePage()),
+                        );
                       },
                       child: const ProfileWidget(
                         icon: Icons.person,
@@ -132,24 +170,21 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       child: const ProfileWidget(
                         icon: Icons.settings,
                         title: 'Configurações',
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       child: const ProfileWidget(
                         icon: Icons.notifications,
                         title: 'Notificações',
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       child: const ProfileWidget(
                         icon: Icons.logout,
                         title: 'Logout',
@@ -187,7 +222,7 @@ class ProfileWidget extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: Colors.teal[700]!.withOpacity(.7), 
+                color: Colors.teal[700]!.withOpacity(.7),
                 size: 24.0,
               ),
               const SizedBox(
@@ -196,7 +231,7 @@ class ProfileWidget extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.teal[700], 
+                  color: Colors.teal[700],
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
@@ -205,7 +240,7 @@ class ProfileWidget extends StatelessWidget {
           ),
           Icon(
             Icons.arrow_forward_ios,
-            color: Colors.teal[700]!.withOpacity(.4), 
+            color: Colors.teal[700]!.withOpacity(.4),
             size: 16.0,
           ),
         ],
