@@ -1,3 +1,4 @@
+import 'package:estudeai/calendario.dart';
 import 'package:estudeai/quiz.dart';
 import 'package:flutter/material.dart';
 import 'perfil.dart';
@@ -41,7 +42,10 @@ class HomePage extends StatelessWidget {
                 Icons.calendar_today,
                 Colors.teal,
                 () {
-                  // Navegar para a tela de Calendário
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CalendarPage()),
+                  );
                 },
               ),
               _buildOptionCard(
