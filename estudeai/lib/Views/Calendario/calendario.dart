@@ -1,3 +1,6 @@
+import 'package:estudeai/Views/Home/home.dart';
+import 'package:estudeai/Views/Perfil/perfil.dart';
+import 'package:estudeai/Views/Quiz/quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -146,7 +149,59 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Calendário de Eventos'),
+          title: Text(
+            'CALENDÁRIO',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          iconTheme: IconThemeData(color: Colors.white),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.account_circle,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.teal,
+                ),
+                child: Text('Menu'),
+              ),
+              ListTile(
+                title: Text('Home Page'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Quizzes'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuizPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         body: Column(
           children: [

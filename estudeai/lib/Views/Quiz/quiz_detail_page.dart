@@ -60,7 +60,11 @@ class _QuizDetailPageState extends State<QuizDetailPage> {
       appBar: AppBar(
         title: Text(
           widget.quiz.name,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         backgroundColor: Colors.teal,
         iconTheme: IconThemeData(color: Colors.white),

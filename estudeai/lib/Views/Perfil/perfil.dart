@@ -1,6 +1,8 @@
-import 'package:estudeai/home.dart';
+import 'package:estudeai/Views/Calendario/calendario.dart';
+import 'package:estudeai/Views/Home/home.dart';
+import 'package:estudeai/Views/Quiz/quiz.dart';
+import 'package:estudeai/Views/TelaInicial/TelaInicial.dart';
 import 'package:flutter/material.dart';
-import 'quiz.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,31 +29,13 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xFF26A69A),
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Text(
-                  'ESTUDE.AI',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ],
-            ),
-            const Text(
-              'Perfil',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 20,
-              ),
-            ),
-          ],
+        title: Text(
+          'PERFIL',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
       ),
       drawer: Drawer(
@@ -75,7 +59,12 @@ class ProfilePage extends StatelessWidget {
             ),
             ListTile(
               title: Text('Calendário'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CalendarPage()),
+                );
+              },
             ),
             ListTile(
               title: Text('Quiz'),
@@ -184,7 +173,13 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TelaInicial()),
+                        );
+                      },
                       child: const ProfileWidget(
                         icon: Icons.logout,
                         title: 'Logout',

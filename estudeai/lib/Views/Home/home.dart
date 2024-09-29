@@ -1,7 +1,7 @@
-import 'package:estudeai/calendario.dart';
-import 'package:estudeai/quiz.dart';
+import 'package:estudeai/Views/Quiz/quiz.dart';
+import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:flutter/material.dart';
-import 'perfil.dart';
+import 'package:estudeai/Views/Perfil/perfil.dart';
 
 class HomePage extends StatelessWidget {
   @override

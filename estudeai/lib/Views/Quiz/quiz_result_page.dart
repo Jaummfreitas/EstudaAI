@@ -15,8 +15,12 @@ class QuizResultPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Resultado do Quiz',
-          style: TextStyle(color: Colors.white),
+          'RESULTADO',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         backgroundColor: Colors.teal,
         iconTheme: IconThemeData(color: Colors.white),

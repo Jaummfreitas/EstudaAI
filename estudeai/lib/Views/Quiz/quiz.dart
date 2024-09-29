@@ -1,7 +1,9 @@
+import 'package:estudeai/Views/Calendario/calendario.dart';
+import 'package:estudeai/Views/Home/home.dart';
+import 'package:estudeai/Views/Perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'quiz_detail_page.dart';
-import 'perfil.dart';
-import 'home.dart';
+
 // ignore_for_file: prefer_const_constructors
 
 void main() {
@@ -74,8 +76,12 @@ class _QuizPageState extends State<QuizPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Quizes',
-          style: TextStyle(color: Colors.white),
+          'QUIZZES',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         actions: [
           IconButton(
@@ -114,7 +120,12 @@ class _QuizPageState extends State<QuizPage> {
             ),
             ListTile(
               title: Text('Calendário'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CalendarPage()),
+                );
+              },
             ),
           ],
         ),

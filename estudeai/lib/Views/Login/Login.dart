@@ -1,3 +1,4 @@
+import 'package:estudeai/Views/Home/home.dart';
 import 'package:flutter/material.dart';
 
 import '../TelaInicial/TelaInicial.dart';
@@ -26,11 +27,10 @@ class _LoginScreenState extends State<Login> {
         _isButtonPressed = false;
       });
 
-      // Navegação para a próxima tela, se necessário
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const TelaInicial()),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     });
   }
 
@@ -38,11 +38,13 @@ class _LoginScreenState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.teal,
-      body: Center(  // Centralizando o conteúdo
+      body: Center(
+        // Centralizando o conteúdo
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(  // Envolva o texto com GestureDetector
+            GestureDetector(
+              // Envolva o texto com GestureDetector
               onTap: () {
                 // Navegue para a TelaInicial ao clicar no texto
                 Navigator.push(
@@ -78,7 +80,8 @@ class _LoginScreenState extends State<Login> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                        color: _isLoginFocused ? Colors.teal : Colors.transparent,
+                        color:
+                            _isLoginFocused ? Colors.teal : Colors.transparent,
                         width: 4,
                       ),
                     ),
@@ -112,7 +115,8 @@ class _LoginScreenState extends State<Login> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                        color: _isSenhaFocused ? Colors.teal : Colors.transparent,
+                        color:
+                            _isSenhaFocused ? Colors.teal : Colors.transparent,
                         width: 4,
                       ),
                     ),
