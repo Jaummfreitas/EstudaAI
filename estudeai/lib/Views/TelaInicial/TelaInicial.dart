@@ -160,11 +160,11 @@ class _TelaInicialState extends State<TelaInicial> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Políticas de Privacidade', style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20),
-              const Text('Aqui estão as políticas de privacidade...'),
-              const SizedBox(height: 20),
-            ],
+            const Text('Políticas de Privacidade', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            Text(_gerarPoliticasPrivacidade()),
+            const SizedBox(height: 20),
+          ],
           ),
           actions: [
             IconButton(
@@ -178,4 +178,8 @@ class _TelaInicialState extends State<TelaInicial> {
       },
     );
   }
+}
+
+String _gerarPoliticasPrivacidade() {
+  return "Lorem ipsum odor amet, consectetuer adipiscing elit. Suscipit aliquet nostra fames lacinia diam magna tempor ad. Volutpat proin lacus commodo donec luctus montes varius? Bibendum eu maecenas facilisis dignissim class non. Nullam nunc donec, placerat vel mus feugiat in. Inceptos at scelerisque felis netus scelerisque ad enim ut.Inceptos rhoncus ac porta est sagittis libero viverra adipiscing laoreet. Sem facilisi ex; morbi rhoncus rhoncus maximus. Arcu conubia velit turpis erat tincidunt sed vulputate nascetur pellentesque. Cursus arcu gravida vitae leo suscipit euismod tincidunt interdum. Quam cursus conubia condimentum orci condimentum ipsum. In duis magnis habitant ridiculus potenti gravida dolor? Luctus ullamcorper varius; fames ridiculus quisque congue odio.Maximus dapibus posuere amet phasellus sagittis hac parturient tortor. Sociosqu inceptos nulla aptent tempor tortor libero maecenas. Vulputate sagittis curae magna libero sapien curabitur. Habitasse est placerat dis tellus vestibulum tellus malesuada justo. Eu scelerisque ad proin dolor platea habitant quisque sapien. Sodales nibh facilisi tincidunt interdum ridiculus fringilla dictum orci. Vitae ante eu augue est condimentum interdum non malesuada.";
 }
