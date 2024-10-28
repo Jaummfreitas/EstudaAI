@@ -100,8 +100,8 @@ class _TelaInicialState extends State<TelaInicial> {
             textStyle: const TextStyle(fontSize: 20),
           ),
           child: const Text(
-              'LOGIN',
-              style: TextStyle(
+            'LOGIN',
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -129,16 +129,53 @@ class _TelaInicialState extends State<TelaInicial> {
           ),
         ),
         const SizedBox(height: 30),
-        const Text(
-          //TODO: Ao clicar em contato, abrir discagem automatica com numero de "contato"
-          //TODO: Ao clicar em politicas, abrir txt com texto aleatorio
-          'CONTATO | POLÍTICAS DE PRIVACIDADE',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: () {
+                _showPrivacyPolicyModal(context);
+              },
+              child: const Text(
+                'POLÍTICAS DE PRIVACIDADE | CONTATO',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
+    );
+  }
+
+  // Função para mostrar o modal de políticas de privacidade
+  void _showPrivacyPolicyModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Políticas de Privacidade', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              const Text('Aqui estão as políticas de privacidade...'),
+              const SizedBox(height: 20),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
