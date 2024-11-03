@@ -1,8 +1,13 @@
+import 'package:estudeai/Views/Service/db_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'Views/TelaInicial/TelaInicial.dart';
 import 'Views/Login/Login.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.database;
+  // printDatabasePath();
   runApp(const MyApp());
 }
 
@@ -20,4 +25,9 @@ class MyApp extends StatelessWidget {
       home: const TelaInicial(),
     );
   }
+}
+
+void printDatabasePath() async {
+  final dbPath = await getDatabasesPath();
+  print('Database path: $dbPath/my_database.db');
 }
