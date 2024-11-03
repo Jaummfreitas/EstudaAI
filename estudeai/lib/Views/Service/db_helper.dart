@@ -61,20 +61,32 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE Quizzes (
         quiz_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        tema TEXT NOT NULL,
+        nivel INTEGER NOT NULL CHECK (nivel IN (0, 1, 2)),
+        valor INTEGER NOT NULL
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE Pergunta (
+        pergunta_id INTEGER PRIMARY KEY AUTOINCREMENT,
         pergunta TEXT NOT NULL,
         nivel INTEGER NOT NULL CHECK (nivel IN (0, 1, 2)),
         id_resposta_correta INTEGER,
         valor INTEGER NOT NULL,
+        id_quiz INTEGER,
         FOREIGN KEY (id_resposta_correta) REFERENCES Alternativas(alternativa_id)
+        FOREIGN KEY (id_quiz) REFERENCES Quizzes(quiz_id)
       );
     ''');
 
     await db.execute('''
       CREATE TABLE Alternativas (
         alternativa_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        quiz_id INTEGER,
+        pergunta_id INTEGER,
         conteudo TEXT NOT NULL,
-        FOREIGN KEY (quiz_id) REFERENCES Quizzes(quiz_id)
+        FOREIGN KEY (pergunta_id) REFERENCES Pergunta(pergunta_id)
       );
     ''');
 
