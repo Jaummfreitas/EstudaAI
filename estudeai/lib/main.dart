@@ -1,13 +1,27 @@
+import 'dart:io';
+
 import 'package:estudeai/Views/Service/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'Views/TelaInicial/TelaInicial.dart';
 import 'Views/Login/Login.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:flutter/foundation.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!Platform.isWindows && !Platform.isLinux && !Platform.isMacOS && !Platform.isAndroid && !Platform.isIOS) {
+    throw UnsupportedError('A execução da aplicação não é suportada no navegador com sqflite.');
+  } else {
+    // Inicializa o databaseFactory corretamente para plataformas suportadas
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+  }
   await DatabaseHelper.instance.database;
-  // printDatabasePath();
+  printDatabasePath();
   runApp(const MyApp());
 }
 
