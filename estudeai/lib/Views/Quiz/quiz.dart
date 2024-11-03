@@ -1,6 +1,7 @@
 import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Perfil/perfil.dart';
+import 'package:estudeai/Views/Service/QuizService.dart';
 import 'package:flutter/material.dart';
 import 'quiz_detail_page.dart';
 
@@ -20,11 +21,13 @@ class MyApp extends StatelessWidget {
 }
 
 class Quiz {
+  final int quizId;
   final String name;
   final String theme;
   final int questionsCount;
 
   Quiz({
+    required this.quizId,
     required this.name,
     required this.theme,
     required this.questionsCount,
@@ -37,32 +40,74 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  final List<Quiz> quizzes = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadUserQuizzes();
+  }
+
+  List<Map<String, dynamic>> quizzes = [];
   final TextEditingController nameController = TextEditingController();
   final TextEditingController themeController = TextEditingController();
   final TextEditingController questionsCountController =
       TextEditingController();
+  final quizHelper = QuizService.instance;
 
-  void _createQuiz() {
+  void _loadUserQuizzes() async {
+    final userId = 1;
+    final userQuizzes = await quizHelper.getQuizzesByUserId(userId);
+    setState(() {
+      quizzes = userQuizzes;
+    });
+  }
+
+  void _createQuiz() async {
     if (nameController.text.isNotEmpty &&
         themeController.text.isNotEmpty &&
         questionsCountController.text.isNotEmpty) {
-      setState(() {
-        quizzes.add(
-          Quiz(
-            name: nameController.text,
-            theme: themeController.text,
-            questionsCount: int.parse(questionsCountController.text),
-          ),
-        );
-      });
+      await quizHelper.createQuiz(nameController.text, themeController.text, 1,
+          10, questionsCountController.text);
+      _loadUserQuizzes();
       nameController.clear();
       themeController.clear();
       questionsCountController.clear();
     }
   }
 
-  void _goToQuiz(Quiz quiz) {
+  void _confirmDeleteQuiz(int quizId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Remover Quiz'),
+        content: Text('Tem certeza de que deseja remover este quiz?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Fecha o diálogo
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await quizHelper.deleteQuizById(quizId);
+              Navigator.pop(context); // Fecha o diálogo
+              _loadUserQuizzes(); // Atualiza a lista de quizzes
+            },
+            child: Text('Remover'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _goToQuiz(Map<String, dynamic> quizData) {
+    // Cria uma instância de Quiz com base nos dados do Map
+    Quiz quiz = Quiz(
+      quizId: quizData['quiz_id'],
+      name: quizData['nome'],
+      theme: quizData['tema'],
+      questionsCount: quizData['questions_count'] ??
+          0, // Certifique-se de que esse campo existe
+    );
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -207,17 +252,57 @@ class _QuizPageState extends State<QuizPage> {
                 itemCount: quizzes.length,
                 itemBuilder: (context, index) {
                   final quiz = quizzes[index];
-                  return GestureDetector(
-                    onTap: () => _goToQuiz(quiz),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.teal),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(quiz.name),
-                      ),
-                    ),
+                  return FutureBuilder<int?>(
+                    future: quizHelper.getQuizScore(
+                        quiz['quiz_id'], 1), // Passa o ID do usuário
+                    builder: (context, snapshot) {
+                      String? nota;
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        nota = 'Carregando...';
+                      } else if (snapshot.hasData && snapshot.data != -1) {
+                        nota = 'Nota: ${snapshot.data}';
+                      } else {
+                        nota = null; // Não exibir se for -1 ou não houver nota
+                      }
+
+                      return GestureDetector(
+                        onTap: () => _goToQuiz(quiz),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.teal),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(quiz['nome']),
+                                    if (nota != null) ...[
+                                      SizedBox(height: 8),
+                                      Text(nota,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey)),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () =>
+                                      _confirmDeleteQuiz(quiz['quiz_id']),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
