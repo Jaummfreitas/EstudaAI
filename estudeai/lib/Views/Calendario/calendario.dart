@@ -1,37 +1,48 @@
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Perfil/perfil.dart';
 import 'package:estudeai/Views/Quiz/quiz.dart';
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../Service/db_helper_calendario.dart';
+
 class Event {
-  int? id; // Adicione um ID para que você possa referenciar eventos no banco de dados
+  int? id;
   String nome;
   String horario;
   String descricao;
   String data;
+  int user_id; // Torna obrigatório
 
-  Event({this.id, required this.nome, required this.horario, required this.descricao, required this.data});
+  Event({
+    this.id,
+    required this.nome,
+    required this.horario,
+    required this.descricao,
+    required this.data,
+    required this.user_id,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'evento_name': nome,
       'evento_time': horario,
       'evento_descricao': descricao,
-      'evento_date': data
+      'evento_date': data,
+      'user_id': user_id, // Inclui user_id no map
     };
   }
 
   static Event fromMap(Map<String, dynamic> map) {
     return Event(
+      id: map['evento_id'],
       nome: map['evento_name'],
       horario: map['evento_time'],
       descricao: map['evento_descricao'],
       data: map['evento_date'],
-      id: map['evento_id']
+      user_id: map['user_id'],
     );
   }
-
 }
 
 class CalendarPage extends StatefulWidget {
@@ -72,14 +83,16 @@ class _CalendarPageState extends State<CalendarPage> {
 
   void _addEvent(String day, Event event, {bool loadFromDb = false}) async {
     if (!loadFromDb) {
-      await CalendarDatabaseHelper.instance.insertEvent(
-          event); // Usa a nova classe
+      // Define o `user_id` do usuário atual ao salvar um novo evento
+      event.user_id = SessionManager().userId as int;
+      await CalendarDatabaseHelper.instance.insertEvent(event);
     }
     setState(() {
       final events = _events.putIfAbsent(day, () => []);
       events.add(event);
     });
   }
+
 
   void _deleteEvent(Event event) async {
     if (event.id != null) {
@@ -101,6 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
       horario: newTime,
       descricao: newDescription,
       data: event.data,
+      user_id: event.user_id
     );
 
     // Atualiza o banco de dados
@@ -173,6 +187,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           nome: eventName,
                           horario: eventTime,
                           descricao: eventDescription,
+                          user_id: SessionManager().userId as int,
                           data: _selectedDay.toString()));
                 }
                 Navigator.of(context).pop();
