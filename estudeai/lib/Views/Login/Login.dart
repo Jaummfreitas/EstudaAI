@@ -1,6 +1,6 @@
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:flutter/material.dart';
-
+import '../Service/UsuarioService.dart';
 import '../TelaInicial/TelaInicial.dart';
 
 class Login extends StatefulWidget {
@@ -17,20 +17,34 @@ class _LoginScreenState extends State<Login> {
   bool _isSenhaFocused = false;
   bool _isButtonPressed = false;
 
-  void _onLoginButtonPressed() {
+  void _onLoginButtonPressed() async {
     setState(() {
       _isButtonPressed = true;
     });
 
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 200), () async {
       setState(() {
         _isButtonPressed = false;
       });
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      // Obtenha o nome e a senha dos campos de texto
+      String nome = _loginController.text;
+      String senha = _senhaController.text;
+
+      var usuario = await UsuarioService.instance.obterPorNome(nome);
+
+      if (usuario != null && usuario['user_password'] == senha) {
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Nome ou senha incorretos')),
+        );
+      }
     });
   }
 
@@ -39,14 +53,11 @@ class _LoginScreenState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.teal,
       body: Center(
-        // Centralizando o conteúdo
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              // Envolva o texto com GestureDetector
               onTap: () {
-                // Navegue para a TelaInicial ao clicar no texto
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const TelaInicial()),
@@ -63,7 +74,7 @@ class _LoginScreenState extends State<Login> {
             ),
             const SizedBox(height: 40),
             Container(
-              width: 300, // Definindo a largura dos campos
+              width: 300,
               child: Focus(
                 onFocusChange: (hasFocus) {
                   setState(() {
@@ -81,7 +92,7 @@ class _LoginScreenState extends State<Login> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         color:
-                            _isLoginFocused ? Colors.teal : Colors.transparent,
+                        _isLoginFocused ? Colors.teal : Colors.transparent,
                         width: 4,
                       ),
                     ),
@@ -98,7 +109,7 @@ class _LoginScreenState extends State<Login> {
             ),
             const SizedBox(height: 20),
             Container(
-              width: 300, // Definindo a largura dos campos
+              width: 300,
               child: Focus(
                 onFocusChange: (hasFocus) {
                   setState(() {
@@ -116,7 +127,7 @@ class _LoginScreenState extends State<Login> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         color:
-                            _isSenhaFocused ? Colors.teal : Colors.transparent,
+                        _isSenhaFocused ? Colors.teal : Colors.transparent,
                         width: 4,
                       ),
                     ),
@@ -136,7 +147,7 @@ class _LoginScreenState extends State<Login> {
               onTap: _onLoginButtonPressed,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                width: 300, // Definindo a largura do botão
+                width: 300,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 decoration: BoxDecoration(
                   color: _isButtonPressed ? Colors.teal[900] : Colors.teal[700],

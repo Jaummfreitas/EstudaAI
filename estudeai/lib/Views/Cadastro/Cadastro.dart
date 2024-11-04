@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Login/Login.dart';
+import '../Service/UsuarioService.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -21,15 +22,23 @@ class _CadastroScreenState extends State<Cadastro> {
   bool _aceitaPoliticas = false;
   bool _receberConteudo = false;
 
-  void _onCadastrarButtonPressed() {
+  void _onCadastrarButtonPressed() async {
     setState(() {
       _isButtonPressed = true;
     });
 
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 200), () async {
       setState(() {
         _isButtonPressed = false;
       });
+
+      // Captura os valores dos campos Nome e Senha
+      String nome = _nomeController.text;
+      String senha = _senhaController.text;
+
+      // Imprime ou usa o objeto User conforme necessário
+      final userHelper = UsuarioService.instance;
+      await userHelper.createUser(nome, senha);
 
       // Navegação para a tela de Login após cadastro
       Navigator.pushReplacement(
@@ -206,3 +215,4 @@ class _CadastroScreenState extends State<Cadastro> {
     );
   }
 }
+
