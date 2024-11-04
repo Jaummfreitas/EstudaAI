@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: const CircleAvatar(
                   radius: 60,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: ExactAssetImage('assets/images/profile.jpg'),
+                  backgroundImage: ExactAssetImage('assets/images/default.png'),
                 ),
               ),
               const SizedBox(height: 10),
@@ -160,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 },
                 child: Text(
-                  'Amigos (2)',
+                  'Amigos',
                   style: TextStyle(
                     color: Colors.black.withOpacity(.8),
                     fontSize: 20,

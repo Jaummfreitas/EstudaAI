@@ -7,7 +7,6 @@ class AddFriendsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController nameController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -36,26 +35,13 @@ class AddFriendsPage extends StatelessWidget {
                 hintText: 'Digite o nome do amigo',
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'Email',
-              style: TextStyle(fontSize: 18),
-            ),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Digite o e-mail do amigo',
-              ),
-            ),
             const SizedBox(height: 32),
             Center(
               child: ElevatedButton(
                 onPressed: () async {
                   String name = nameController.text;
-                  String email = emailController.text;
 
-                  if (name.isEmpty || email.isEmpty) {
+                  if (name.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Por favor, preencha todos os campos.'),
@@ -72,14 +58,12 @@ class AddFriendsPage extends StatelessWidget {
                   );
                   await amigosDB.insertFriend(amigo);
                   nameController.clear();
-                  emailController.clear();
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Amigo $name adicionado com sucesso!'),
                     ),
                   );
-
                 },
                 child: const Text('Adicionar'),
                 style: ElevatedButton.styleFrom(

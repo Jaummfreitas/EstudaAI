@@ -26,6 +26,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/profile.jpg
     - assets/images/verified.png
-    - assets/images/friend.png
+    - assets/images/default.png
