@@ -100,8 +100,8 @@ class _TelaInicialState extends State<TelaInicial> {
             textStyle: const TextStyle(fontSize: 20),
           ),
           child: const Text(
-              'LOGIN',
-              style: TextStyle(
+            'LOGIN',
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
