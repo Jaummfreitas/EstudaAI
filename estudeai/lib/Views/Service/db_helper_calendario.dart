@@ -1,6 +1,8 @@
 import 'db_helper.dart'; // Importa sua classe geral de banco de dados
 import 'package:sqflite/sqflite.dart';
 import '../Calendario/calendario.dart'; // Certifique-se de importar a classe Event que você criou
+import 'package:estudeai/Views/Service/SessionManager.dart';
+
 
 class CalendarDatabaseHelper {
   static final CalendarDatabaseHelper instance = CalendarDatabaseHelper._init();
@@ -14,8 +16,13 @@ class CalendarDatabaseHelper {
 
   Future<List<Event>> fetchEvents() async {
     final db = await DatabaseHelper.instance.database;
-    final result = await db.query('Evento');
-    return result.map((json) => Event.fromMap(json)).toList();
+    int userId = SessionManager().userId as int; // Obtém o ID do usuário atual
+    final maps = await db.query(
+      'Evento ',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+    return maps.map((json) => Event.fromMap(json)).toList();
   }
 
   Future<int> deleteEvent(int id) async {

@@ -1,9 +1,10 @@
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:estudeai/Views/Service/db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class QuizService {
   static final QuizService instance = QuizService._init();
-  int idUsuario = 1;
+  int idUsuario = SessionManager().userId!;
 
   QuizService._init();
 
@@ -36,7 +37,7 @@ class QuizService {
         {
           'pergunta': 'Pergunta genérica $i para nível $nivel',
           'nivel': nivel,
-          'id_resposta_correta': null, // Temporariamente null
+          'id_resposta_correta': null,
           'valor': valor,
           'id_quiz': await db
               .rawQuery("SELECT MAX(quiz_id) as id FROM Quizzes")
@@ -54,13 +55,11 @@ class QuizService {
           },
         );
 
-        // Defina uma alternativa correta (por exemplo, a primeira alternativa)
         if (j == 1) {
           alternativaCorretaId = alternativaId;
         }
       }
 
-      // Atualize a pergunta com o ID da alternativa correta
       await db.update(
         'Pergunta',
         {'id_resposta_correta': alternativaCorretaId},
@@ -73,19 +72,16 @@ class QuizService {
   Future<void> associarUsuarioAoQuiz() async {
     final db = await DatabaseHelper.instance.database;
 
-    // Obtenha o ID do último quiz criado
     int quizId = await db
         .rawQuery("SELECT MAX(quiz_id) as id FROM Quizzes")
         .then((res) => (res.first['id'] as int?) ?? 0);
 
-    // Insira a associação do usuário com o quiz na tabela `User_quizzes`
     await db.insert(
       'User_quizzes',
       {
         'quiz_id': quizId,
-        'user_id': idUsuario, // ID do usuário base que você mencionou
-        'nota':
-            -1, // Nota inicial (pode ser alterada depois de completar o quiz)
+        'user_id': idUsuario,
+        'nota': -1,
       },
     );
   }
@@ -93,7 +89,6 @@ class QuizService {
   Future<List<Map<String, dynamic>>> getQuestionsByQuizId(int quizId) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Consulta para recuperar as perguntas associadas a um quiz
     List<Map<String, dynamic>> questions = await db.query(
       'Pergunta',
       where: 'id_quiz = ?',
@@ -107,7 +102,6 @@ class QuizService {
       int questionId) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Consulta para recuperar as alternativas associadas a uma pergunta
     List<Map<String, dynamic>> alternatives = await db.query(
       'Alternativas',
       where: 'pergunta_id = ?',
@@ -120,7 +114,6 @@ class QuizService {
   Future<List<Map<String, dynamic>>> getQuizzesByUserId(int userId) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Consulta para recuperar os quizzes associados a um usuário
     List<Map<String, dynamic>> userQuizzes = await db.rawQuery('''
     SELECT q.*
     FROM Quizzes q
@@ -134,7 +127,6 @@ class QuizService {
   Future<String> getAlternativeTextById(int alternativeId) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Consulta para pegar o texto da alternativa com base no ID
     List<Map<String, dynamic>> result = await db.query(
       'Alternativas',
       columns: ['conteudo'],
@@ -142,7 +134,6 @@ class QuizService {
       whereArgs: [alternativeId],
     );
 
-    // Retorna o texto da alternativa ou uma string vazia se não encontrado
     return result.isNotEmpty
         ? result.first['conteudo']
         : 'Alternativa não encontrada';
@@ -151,9 +142,7 @@ class QuizService {
   Future<void> deleteQuizById(int quizId) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Inicia uma transação para garantir que todas as operações sejam atômicas
     await db.transaction((txn) async {
-      // Remove as alternativas das perguntas do quiz
       await txn.delete(
         'Alternativas',
         where:
@@ -161,21 +150,18 @@ class QuizService {
         whereArgs: [quizId],
       );
 
-      // Remove as perguntas do quiz
       await txn.delete(
         'Pergunta',
         where: 'id_quiz = ?',
         whereArgs: [quizId],
       );
 
-      // Remove a relação do usuário com o quiz
       await txn.delete(
         'User_quizzes',
         where: 'quiz_id = ?',
         whereArgs: [quizId],
       );
 
-      // Remove o quiz
       await txn.delete(
         'Quizzes',
         where: 'quiz_id = ?',
@@ -187,10 +173,9 @@ class QuizService {
   Future<void> saveQuizScore(int quizId, int userId, double score) async {
     final db = await DatabaseHelper.instance.database;
 
-    // Atualiza a nota do usuário para o quiz específico
     await db.update(
       'User_quizzes',
-      {'nota': score.toInt()}, // Armazena a pontuação como um inteiro
+      {'nota': score.toInt()},
       where: 'quiz_id = ? AND user_id = ?',
       whereArgs: [quizId, userId],
     );
@@ -206,7 +191,6 @@ class QuizService {
       whereArgs: [quizId, userId],
     );
 
-    // Retorna a nota ou null se não houver
     return result.isNotEmpty ? result.first['nota'] as int? : null;
   }
 }
