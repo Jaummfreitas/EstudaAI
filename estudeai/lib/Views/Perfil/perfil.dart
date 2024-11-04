@@ -1,23 +1,12 @@
-import 'package:estudeai/Views/Calendario/calendario.dart';
+import 'package:flutter/material.dart';
 import 'package:estudeai/Views/Home/home.dart';
+import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Quiz/quiz.dart';
 import 'package:estudeai/Views/TelaInicial/TelaInicial.dart';
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ProfilePage(),
-    );
-  }
-}
+import 'package:estudeai/Views/Perfil/configurações.dart'; 
+import 'package:estudeai/Views/Perfil/definições.dart';
+import 'package:estudeai/Views/Perfil/addAmigo.dart'; 
+import 'package:estudeai/Views/Perfil/amigos.dart'; 
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -27,9 +16,9 @@ class ProfilePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xFF26A69A),
-        title: Text(
+        title: const Text(
           'PERFIL',
           style: TextStyle(
             color: Colors.white,
@@ -42,14 +31,14 @@ class ProfilePage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.teal,
               ),
               child: Text('Menu'),
             ),
             ListTile(
-              title: Text('Home Page'),
+              title: const Text('Home Page'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -58,7 +47,7 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Calendário'),
+              title: const Text('Calendário'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -67,11 +56,20 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Quiz'),
+              title: const Text('Quiz'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => QuizPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Adicionar Amigos'), 
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddFriendsPage()),
                 );
               },
             ),
@@ -102,9 +100,7 @@ class ProfilePage extends StatelessWidget {
                   backgroundImage: ExactAssetImage('assets/images/profile.jpg'),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               SizedBox(
                 width: size.width * .8,
                 child: Column(
@@ -120,9 +116,7 @@ class ProfilePage extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
+                        const SizedBox(width: 8.0),
                         SizedBox(
                           height: 24.0,
                           child: Image.asset("assets/images/verified.png"),
@@ -139,8 +133,28 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.black.withOpacity(.8),
                 ),
               ),
+              const SizedBox(height: 16),
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendsListPage()), 
+                  );
+                },
+                child: Text(
+                  'Amigos (2)',
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(.8),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+
               SizedBox(
-                height: size.height * .7,
+                height: size.height * .4,
                 width: size.width,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +164,8 @@ class ProfilePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ProfilePage()),
+                            builder: (context) => SettingsPage(),
+                          ),
                         );
                       },
                       child: const ProfileWidget(
@@ -159,17 +174,17 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddFriendsPage(), 
+                          ),
+                        );
+                      },
                       child: const ProfileWidget(
-                        icon: Icons.settings,
-                        title: 'Configurações',
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: const ProfileWidget(
-                        icon: Icons.notifications,
-                        title: 'Notificações',
+                        icon: Icons.person_add,
+                        title: 'Adicionar Amigos',
                       ),
                     ),
                     InkWell(
@@ -177,7 +192,22 @@ class ProfilePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => TelaInicial()),
+                            builder: (context) => DefinicoesPage(),
+                          ),
+                        );
+                      },
+                      child: const ProfileWidget(
+                        icon: Icons.settings,
+                        title: 'Configurações',
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TelaInicial(),
+                          ),
                         );
                       },
                       child: const ProfileWidget(
@@ -187,7 +217,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -220,9 +251,7 @@ class ProfileWidget extends StatelessWidget {
                 color: Colors.teal[700]!.withOpacity(.7),
                 size: 24.0,
               ),
-              const SizedBox(
-                width: 16.0,
-              ),
+              const SizedBox(width: 16.0),
               Text(
                 title,
                 style: TextStyle(
