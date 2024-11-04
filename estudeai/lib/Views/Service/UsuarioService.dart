@@ -1,3 +1,4 @@
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:estudeai/Views/Service/db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,7 +30,10 @@ class UsuarioService {
     );
 
     if (result.isNotEmpty) {
-      return result.first;
+      final user = result.first;
+      SessionManager().userId = user['user_id'] as int?;
+      print(SessionManager().userId);
+      return user;
     } else {
       return null;
     }

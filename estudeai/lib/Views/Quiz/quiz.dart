@@ -2,6 +2,7 @@ import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Perfil/perfil.dart';
 import 'package:estudeai/Views/Service/QuizService.dart';
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'quiz_detail_page.dart';
 
@@ -54,7 +55,7 @@ class _QuizPageState extends State<QuizPage> {
   final quizHelper = QuizService.instance;
 
   void _loadUserQuizzes() async {
-    final userId = 1;
+    final userId = SessionManager().userId as int;
     final userQuizzes = await quizHelper.getQuizzesByUserId(userId);
     setState(() {
       quizzes = userQuizzes;
