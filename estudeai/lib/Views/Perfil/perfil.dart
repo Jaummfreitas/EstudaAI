@@ -1,15 +1,40 @@
+import 'package:estudeai/Views/Service/SessionManager.dart';
+import 'package:estudeai/Views/Service/UsuarioService.dart';
 import 'package:flutter/material.dart';
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Quiz/quiz.dart';
 import 'package:estudeai/Views/TelaInicial/TelaInicial.dart';
-import 'package:estudeai/Views/Perfil/configurações.dart'; 
+import 'package:estudeai/Views/Perfil/configurações.dart';
 import 'package:estudeai/Views/Perfil/definições.dart';
-import 'package:estudeai/Views/Perfil/addAmigo.dart'; 
-import 'package:estudeai/Views/Perfil/amigos.dart'; 
+import 'package:estudeai/Views/Perfil/addAmigo.dart';
+import 'package:estudeai/Views/Perfil/amigos.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String userName = '';
+  final usuarioService = UsuarioService.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
+
+  Future<void> _fetchUserName() async {
+    final userId = SessionManager().userId as int;
+    final String name = await usuarioService
+        .obterNomePorId(userId); // Substitua 1 pelo ID desejado
+    setState(() {
+      userName = name;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +90,7 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Adicionar Amigos'), 
+              title: const Text('Adicionar Amigos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -109,9 +134,9 @@ class ProfilePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'João Vítor',
-                          style: TextStyle(
+                        Text(
+                          userName.isNotEmpty ? userName : 'Carregando...',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 20,
                           ),
@@ -127,19 +152,11 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'jvitorfreitas2004@gmail.com',
-                style: TextStyle(
-                  color: Colors.black.withOpacity(.8),
-                ),
-              ),
-              const SizedBox(height: 16),
-
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FriendsListPage()), 
+                    MaterialPageRoute(builder: (context) => FriendsListPage()),
                   );
                 },
                 child: Text(
@@ -152,7 +169,6 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-
               SizedBox(
                 height: size.height * .4,
                 width: size.width,
@@ -178,7 +194,7 @@ class ProfilePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddFriendsPage(), 
+                            builder: (context) => AddFriendsPage(),
                           ),
                         );
                       },

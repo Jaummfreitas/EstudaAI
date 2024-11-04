@@ -38,4 +38,21 @@ class UsuarioService {
       return null;
     }
   }
+
+  Future<String> obterNomePorId(int id) async {
+    final db = await DatabaseHelper.instance.database;
+
+    final result = await db.query(
+      'User',
+      where: 'user_id = ?',
+      whereArgs: [id],
+    );
+
+    if (result.isNotEmpty) {
+      final user = result.first;
+      return user['user_name'] as String;
+    } else {
+      return '';
+    }
+  }
 }

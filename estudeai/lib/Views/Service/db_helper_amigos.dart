@@ -1,6 +1,7 @@
-import 'db_helper.dart'; 
+import 'db_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import '../Perfil/amigos.dart'; 
+import '../Perfil/amigos.dart';
+
 class Amigos {
   final int? id;
   final int userId1;
@@ -39,30 +40,11 @@ class AmigosDatabaseHelper {
   AmigosDatabaseHelper._init();
 
   Future<Database> get database async {
-    return await _initDB('amigos.db'); 
-  }
-
-  Future<Database> _initDB(String filePath) async {
-    return await openDatabase(
-      filePath,
-      version: 1,
-      onCreate: _createDatabase,
-    );
-  }
-
-  Future<void> _createDatabase(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE Amigos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id_1 INTEGER,
-        user_id_2 INTEGER,
-        data_inicio TEXT
-      )
-    ''');
+    return await DatabaseHelper.instance.database;
   }
 
   Future<int> insertFriend(Amigos amigo) async {
-    final db = await database; 
+    final db = await database;
     return await db.insert('Amigos', amigo.toMap());
   }
 
@@ -84,10 +66,10 @@ class AmigosDatabaseHelper {
   Future<void> updateFriend(Amigos amigo) async {
     final db = await database;
     await db.update(
-      'Amigos', 
-      amigo.toMap(), 
-      where: 'id = ?', 
-      whereArgs: [amigo.id], 
+      'Amigos',
+      amigo.toMap(),
+      where: 'id = ?',
+      whereArgs: [amigo.id],
     );
   }
 }
