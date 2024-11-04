@@ -50,7 +50,6 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // Ação de alterar foto
                 },
                 child: const Text(
                   'Alterar Foto',
@@ -85,10 +84,6 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Ação de salvar as alterações (opcional)
-                  // Adicione sua lógica para salvar as alterações aqui
-
-                  // Retorna à tela anterior
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(

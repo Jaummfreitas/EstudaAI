@@ -6,7 +6,7 @@ import 'package:estudeai/Views/TelaInicial/TelaInicial.dart';
 import 'package:estudeai/Views/Perfil/configurações.dart'; 
 import 'package:estudeai/Views/Perfil/definições.dart';
 import 'package:estudeai/Views/Perfil/addAmigo.dart'; 
-import 'package:estudeai/Views/Perfil/amigos.dart'; // Importe a página Amigos
+import 'package:estudeai/Views/Perfil/amigos.dart'; 
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -65,7 +65,7 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Adicionar Amigos'), // Navega para Adicionar Amigos
+              title: const Text('Adicionar Amigos'), 
               onTap: () {
                 Navigator.push(
                   context,
@@ -135,12 +135,11 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Texto "Amigos (2)" adicionado aqui
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FriendsListPage()), // Navega para a página Amigos
+                    MaterialPageRoute(builder: (context) => FriendsListPage()), 
                   );
                 },
                 child: Text(
@@ -174,13 +173,12 @@ class ProfilePage extends StatelessWidget {
                         title: 'Meu Perfil',
                       ),
                     ),
-                    // Botão Adicionar Amigos posicionado entre Meu Perfil e Configurações
                     InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddFriendsPage(), // Navega para a página de adicionar amigos
+                            builder: (context) => AddFriendsPage(), 
                           ),
                         );
                       },

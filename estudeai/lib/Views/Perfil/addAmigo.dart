@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Service/db_helper_amigos.dart';
 
 class AddFriendsPage extends StatelessWidget {
   const AddFriendsPage({super.key});
@@ -19,7 +20,7 @@ class AddFriendsPage extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
-        color: Colors.white, // Cor de fundo igual às outras páginas
+        color: Colors.white, 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,27 +51,41 @@ class AddFriendsPage extends StatelessWidget {
             const SizedBox(height: 32),
             Center(
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   String name = nameController.text;
                   String email = emailController.text;
 
-                  // Aqui você pode adicionar a lógica para adicionar o amigo,
-                  // como chamar um método para salvar no banco de dados ou na lista.
+                  if (name.isEmpty || email.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Por favor, preencha todos os campos.'),
+                      ),
+                    );
+                    return; 
+                  }
 
-                  // Exemplo:
-                  // addFriend(name, email);
-
-                  // Limpar os campos após adicionar
+                  final amigosDB = AmigosDatabaseHelper.instance;
+                  final amigo = Amigos(
+                    userId1: 1, 
+                    userId2: 2, 
+                    dataInicio: DateTime.now().toIso8601String(), 
+                  );
+                  await amigosDB.insertFriend(amigo);
                   nameController.clear();
                   emailController.clear();
 
-                  // Você pode adicionar lógica adicional aqui, se necessário
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Amigo $name adicionado com sucesso!'),
+                    ),
+                  );
+
                 },
                 child: const Text('Adicionar'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF26A69A), // Cor do botão
-                  foregroundColor: Colors.white, // Cor do texto do botão
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Padding do botão
+                  backgroundColor: const Color(0xFF26A69A), 
+                  foregroundColor: Colors.white, 
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), 
                   textStyle: const TextStyle(fontSize: 18),
                 ),
               ),
