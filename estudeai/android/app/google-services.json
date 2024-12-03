@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65151645526",
+    "project_id": "estude-ai-puc",
+    "storage_bucket": "estude-ai-puc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65151645526:android:c58b6be4555c305dd748f7",
+        "android_client_info": {
+          "package_name": "com.estudeai.puc.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLOEHV4wS-f0UWconxkpsPl2MUTVPYYlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
