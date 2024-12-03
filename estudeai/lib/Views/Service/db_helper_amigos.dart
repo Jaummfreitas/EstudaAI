@@ -63,8 +63,8 @@ class AmigosDatabaseHelper {
     int userId = SessionManager().userId as int;
     final result = await db.query(
       'Amigos',
-      where: 'user_id_1 = ?',
-      whereArgs: [userId]
+      where: 'user_id_1 = ? OR user_id_2 = ?',
+      whereArgs: [userId, userId],
       );
     return result.map((json) => Amigos.fromMap(json)).toList();
   }

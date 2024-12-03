@@ -1,13 +1,12 @@
 import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:estudeai/Views/Service/db_helper.dart';
-import 'package:sqflite/sqflite.dart';
 
 class UsuarioService {
   static final UsuarioService instance = UsuarioService._init();
 
   UsuarioService._init();
 
-  Future<void> createUser(String nome, String senha) async {
+  Future<void> createUser(String nome, String senha, String email) async {
     final db = await DatabaseHelper.instance.database;
 
     await db.insert(
@@ -15,6 +14,7 @@ class UsuarioService {
       {
         'user_name': nome,
         'user_password': senha,
+        'user_email': email,
         'user_status': 1,
       },
     );
@@ -55,7 +55,8 @@ class UsuarioService {
       return '';
     }
   }
-    Future<int> obterIDporNome(String name) async {
+
+  Future<int> obterIDporNome(String name) async {
     final db = await DatabaseHelper.instance.database;
 
     final result = await db.query(
@@ -71,4 +72,57 @@ class UsuarioService {
       return -1;
     }
   }
+
+  /// Atualiza o nome do usuário
+  Future<void> atualizarNome(int userId, String novoNome) async {
+    final db = await DatabaseHelper.instance.database;
+
+    await db.update(
+      'User',
+      {'user_name': novoNome},
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  /// Atualiza o email do usuário
+  Future<void> atualizarEmail(int userId, String novoEmail) async {
+    final db = await DatabaseHelper.instance.database;
+
+    await db.update(
+      'User',
+      {'user_email': novoEmail},
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  /// Atualiza a senha do usuário
+  Future<void> atualizarSenha(int userId, String novaSenha) async {
+    final db = await DatabaseHelper.instance.database;
+
+    await db.update(
+      'User',
+      {'user_password': novaSenha},
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  Future<Map<String, dynamic>?> obterPorNomePorId(int userId) async {
+  final db = await DatabaseHelper.instance.database;
+
+  final result = await db.query(
+    'User',
+    where: 'user_id = ?',
+    whereArgs: [userId],
+  );
+
+  if (result.isNotEmpty) {
+    return result.first;
+  } else {
+    return null;
+  }
+}
+
 }

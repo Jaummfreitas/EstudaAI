@@ -31,6 +31,7 @@ class DatabaseHelper {
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_name TEXT NOT NULL,
         user_password TEXT NOT NULL,
+        user_email TEXT NOT NULL,
         user_status INTEGER NOT NULL CHECK (user_status IN (0, 1))
       );
     ''');

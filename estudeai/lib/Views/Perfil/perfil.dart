@@ -5,8 +5,8 @@ import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Quiz/quiz.dart';
 import 'package:estudeai/Views/TelaInicial/TelaInicial.dart';
-import 'package:estudeai/Views/Perfil/configurações.dart';
-import 'package:estudeai/Views/Perfil/definições.dart';
+import 'package:estudeai/Views/Perfil/meuPerfil.dart';
+import 'package:estudeai/Views/Perfil/configuracoes.dart';
 import 'package:estudeai/Views/Perfil/addAmigo.dart';
 import 'package:estudeai/Views/Perfil/amigos.dart';
 

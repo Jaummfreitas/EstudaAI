@@ -33,13 +33,13 @@ class _CadastroScreenState extends State<Cadastro> {
         _isButtonPressed = false;
       });
 
-      // Captura os valores dos campos Nome e Senha
+      // Captura os valores dos campos Nome e Senha e Email
       String nome = _nomeController.text;
       String senha = _senhaController.text;
-
+      String email = _emailController.text;
       // Imprime ou usa o objeto User conforme necessário
       final userHelper = UsuarioService.instance;
-      await userHelper.createUser(nome, senha);
+      await userHelper.createUser(nome, senha, email);
 
       // Navegação para a tela de Login após cadastro
       Navigator.pushReplacement(

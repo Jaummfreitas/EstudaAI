@@ -1,11 +1,35 @@
+import 'package:estudeai/Views/Service/UsuarioService.dart';
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatelessWidget {
-  final TextEditingController nameController =
-      TextEditingController(text: 'João Vítor');
-  final TextEditingController emailController =
-      TextEditingController(text: 'jvitorfreitas2004@gmail.com');
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final userId = SessionManager().userId;
+    if (userId != null) {
+      final user = await UsuarioService.instance.obterPorNomePorId(userId);
+      if (user != null) {
+        setState(() {
+          nameController.text = user['user_name'] as String? ?? '';
+          emailController.text = user['user_email'] as String? ?? '';
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +73,7 @@ class SettingsPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               TextButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 child: const Text(
                   'Alterar Foto',
                   style: TextStyle(color: Colors.teal),
@@ -83,7 +106,22 @@ class SettingsPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  final userId = SessionManager().userId;
+                  if (userId != null) {
+                    if (nameController.text.isNotEmpty) {
+                      await UsuarioService.instance
+                          .atualizarNome(userId, nameController.text);
+                    }
+                    if (emailController.text.isNotEmpty) {
+                      await UsuarioService.instance
+                          .atualizarEmail(userId, emailController.text);
+                    }
+                    if (passwordController.text.isNotEmpty) {
+                      await UsuarioService.instance
+                          .atualizarSenha(userId, passwordController.text);
+                    }
+                  }
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
