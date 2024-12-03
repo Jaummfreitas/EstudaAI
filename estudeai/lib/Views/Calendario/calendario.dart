@@ -82,17 +82,22 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-  void _addEvent(String day, Event event, {bool loadFromDb = false}) async {
-    if (!loadFromDb) {
-      // Define o `user_id` do usuário atual ao salvar um novo evento
-      event.user_id = SessionManager().userId as int;
-      await CalendarDatabaseHelper.instance.insertEvent(event);
-    }
-    setState(() {
-      final events = _events.putIfAbsent(day, () => []);
-      events.add(event);
-    });
+void _addEvent(String day, Event event, {bool loadFromDb = false}) async {
+  if (!loadFromDb) {
+    // Define o `user_id` do usuário atual ao salvar um novo evento
+    event.user_id = SessionManager().userId as int;
+
+    // Inserir evento no banco de dados e obter o ID gerado
+    final newId = await CalendarDatabaseHelper.instance.insertEvent(event);
+    event.id = newId; // Atualiza o ID do evento com o valor gerado
   }
+
+  setState(() {
+    final events = _events.putIfAbsent(day, () => []);
+    events.add(event);
+  });
+}
+
 
 
   void _deleteEvent(Event event) async {
