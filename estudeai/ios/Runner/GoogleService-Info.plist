@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDZqTOgmCx2x_yUoV00nuVQO9Su3DcV2Co</string>
+	<key>GCM_SENDER_ID</key>
+	<string>65151645526</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.estudai.estudeai</string>
+	<key>PROJECT_ID</key>
+	<string>estude-ai-puc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>estude-ai-puc.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:65151645526:ios:f7eb5b8b946633ecd748f7</string>
+</dict>
+</plist>
