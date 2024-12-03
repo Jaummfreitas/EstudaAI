@@ -1,6 +1,7 @@
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:flutter/material.dart';
 import '../Service/db_helper_amigos.dart';
-
+import '../Service/UsuarioService.dart';
 class AddFriendsPage extends StatelessWidget {
   const AddFriendsPage({super.key});
 
@@ -51,10 +52,14 @@ class AddFriendsPage extends StatelessWidget {
                   }
 
                   final amigosDB = AmigosDatabaseHelper.instance;
+                  final userDB = UsuarioService.instance;
+                  final id = SessionManager().userId as int;
                   final amigo = Amigos(
-                    userId1: 1, 
-                    userId2: 2, 
-                    dataInicio: DateTime.now().toIso8601String(), 
+                    userId1: id, 
+                    userId2: await userDB.obterIDporNome(name), 
+                    dataInicio: DateTime.now().toIso8601String(),
+                    nome1: await userDB.obterNomePorId(id),
+                    nome2: name,
                   );
                   await amigosDB.insertFriend(amigo);
                   nameController.clear();

@@ -1,3 +1,5 @@
+import 'package:estudeai/Views/Service/SessionManager.dart';
+import 'package:flutter/foundation.dart';
 import 'db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import '../Perfil/amigos.dart';
@@ -7,12 +9,16 @@ class Amigos {
   final int userId1;
   final int userId2;
   final String dataInicio;
+  final String nome1;
+  final String nome2;
 
   Amigos({
     this.id,
     required this.userId1,
     required this.userId2,
     required this.dataInicio,
+    required this.nome1,
+    required this.nome2
   });
 
   Map<String, dynamic> toMap() {
@@ -21,6 +27,8 @@ class Amigos {
       'user_id_1': userId1,
       'user_id_2': userId2,
       'data_inicio': dataInicio,
+      'nome_1': nome1,
+      'nome_2': nome2
     };
   }
 
@@ -30,6 +38,8 @@ class Amigos {
       userId1: map['user_id_1'] as int,
       userId2: map['user_id_2'] as int,
       dataInicio: map['data_inicio'] as String,
+      nome1: map['nome_1'] as String,
+      nome2: map['nome_2'] as String
     );
   }
 }
@@ -50,7 +60,12 @@ class AmigosDatabaseHelper {
 
   Future<List<Amigos>> fetchFriends() async {
     final db = await database;
-    final result = await db.query('Amigos');
+    int userId = SessionManager().userId as int;
+    final result = await db.query(
+      'Amigos',
+      where: 'user_id_1 = ?',
+      whereArgs: [userId]
+      );
     return result.map((json) => Amigos.fromMap(json)).toList();
   }
 
@@ -72,4 +87,6 @@ class AmigosDatabaseHelper {
       whereArgs: [amigo.id],
     );
   }
+
+
 }

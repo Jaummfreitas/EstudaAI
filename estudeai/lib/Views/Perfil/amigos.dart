@@ -41,7 +41,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
         ),
       ),
       body: Container(
-        color: Colors.white, 
+        color: Colors.white,
         child: FutureBuilder<List<Amigos>>(
           future: friendsFuture,
           builder: (context, snapshot) {
@@ -57,12 +57,14 @@ class _FriendsListPageState extends State<FriendsListPage> {
                 itemCount: friends.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 16.0),
                     child: Row(
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundImage: AssetImage('assets/images/friend.png'), 
+                          backgroundImage:
+                              AssetImage('assets/images/friend.png'),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -76,17 +78,29 @@ class _FriendsListPageState extends State<FriendsListPage> {
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(
-                                    '${friends[index].id}',
-                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    '${friends[index].userId2}',
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text('Nome do Amigo: ',
+                                      style: const TextStyle(fontSize: 18)),
+                                  Text(
+                                    '${friends[index].nome2}',
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
-                              Text('Data de Início: ${_formatDate(friends[index].dataInicio)}', style: const TextStyle(fontSize: 14)),
+                              Text(
+                                  'Data de Início: ${_formatDate(friends[index].dataInicio)}',
+                                  style: const TextStyle(fontSize: 14)),
                             ],
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red), 
+                          icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () {
                             _removeFriend(friends[index].id!);
                           },

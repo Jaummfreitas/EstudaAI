@@ -53,6 +53,8 @@ class DatabaseHelper {
         user_id_1 INTEGER,
         user_id_2 INTEGER,
         data_inicio TEXT NOT NULL,
+        nome_1 TEXT NOT NULL,
+        nome_2 TEXT NOT NULL,
         FOREIGN KEY (user_id_1) REFERENCES User(user_id),
         FOREIGN KEY (user_id_2) REFERENCES User(user_id)
       );
