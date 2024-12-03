@@ -25,6 +25,7 @@ class Event {
 
   Map<String, dynamic> toMap() {
     return {
+      'evento_id': id,
       'evento_name': nome,
       'evento_time': horario,
       'evento_descricao': descricao,
