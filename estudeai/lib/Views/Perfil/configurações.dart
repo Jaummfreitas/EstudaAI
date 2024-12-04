@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:estudeai/Views/Service/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:estudeai/Views/Service/UsuarioService.dart';
 
 class SettingsPage extends StatefulWidget {
 const SettingsPage({Key? key}) : super(key: key);
@@ -10,12 +12,71 @@ State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-final TextEditingController nameController =
-    TextEditingController(text: 'João Vítor');
-final TextEditingController emailController =
-    TextEditingController(text: 'jvitorfreitas2004@gmail.com');
+final usuarioService = UsuarioService.instance;
+late TextEditingController nameController;
+late TextEditingController emailController;
 final TextEditingController passwordController = TextEditingController();
 File? _image;
+
+@override
+void initState() {
+  super.initState();
+  _fetchUserData();
+}
+
+Future<void> _fetchUserData() async {
+  final userId = SessionManager().userId as int;
+  try {
+    final String name = await usuarioService.obterNomePorId(userId);
+    final String email = await usuarioService.obterEmailPorId(userId);
+    setState(() {
+      nameController = TextEditingController(text: name);
+      emailController = TextEditingController(text: email);
+    });
+  } catch (e) {
+    print("Erro ao buscar dados do usuário: $e");
+    setState(() {
+      nameController = TextEditingController(text: "Erro ao carregar nome");
+      emailController = TextEditingController(text: "Erro ao carregar email");
+    });
+  }
+}
+
+Future<void> _updateUserData() async {
+  final userId = SessionManager().userId as int;
+  try {
+    // Atualiza o nome se foi modificado
+    if (nameController.text.isNotEmpty) {
+      await usuarioService.atualizarNome(userId, nameController.text);
+    }
+
+    // Atualiza o email se foi modificado
+    if (emailController.text.isNotEmpty) {
+      await usuarioService.atualizarEmail(userId, emailController.text);
+    }
+
+    // Atualiza a senha se foi modificada
+    if (passwordController.text.isNotEmpty) {
+      await usuarioService.atualizarSenha(userId, passwordController.text);
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Dados atualizados com sucesso!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+    Navigator.pop(context);
+  } catch (e) {
+    print("Erro ao atualizar dados do usuário: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Erro ao atualizar dados. Tente novamente.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
 
 Future<void> _pickImage(ImageSource source) async {
   try {
@@ -26,9 +87,9 @@ Future<void> _pickImage(ImageSource source) async {
       });
     }
   } catch (e) {
-    print(e); // Print the error for debugging
+    print(e);
   } finally {
-    Navigator.of(context).pop(); // Close the dialog
+    Navigator.of(context).pop();
   }
 }
 
@@ -87,8 +148,7 @@ Widget build(BuildContext context) {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            const Icon(
-                                Icons.image, size: 60, color: Colors.grey),
+                            const Icon(Icons.image, size: 60, color: Colors.grey),
                             const SizedBox(height: 10),
                             const Text(
                               "Choose an image",
@@ -99,8 +159,7 @@ Widget build(BuildContext context) {
                             ),
                             const SizedBox(height: 20),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ElevatedButton(
                                   onPressed: () =>
@@ -153,13 +212,11 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: _updateUserData,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF26A69A),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 40, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
