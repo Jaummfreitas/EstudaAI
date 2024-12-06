@@ -66,7 +66,6 @@ class DatabaseHelper {
         quiz_id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         tema TEXT NOT NULL,
-        nivel INTEGER NOT NULL CHECK (nivel IN (0, 1, 2)),
         valor INTEGER NOT NULL
       );
     ''');
@@ -75,7 +74,6 @@ class DatabaseHelper {
       CREATE TABLE Pergunta (
         pergunta_id INTEGER PRIMARY KEY AUTOINCREMENT,
         pergunta TEXT NOT NULL,
-        nivel INTEGER NOT NULL CHECK (nivel IN (0, 1, 2)),
         id_resposta_correta INTEGER,
         valor INTEGER NOT NULL,
         id_quiz INTEGER,
