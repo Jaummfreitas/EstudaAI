@@ -9,7 +9,7 @@ class QuizService {
   QuizService._init();
 
   Future<void> createQuiz(
-      String nome, String tema, int nivel, int valor, String quantidade) async {
+      String nome, String tema, int valor, String quantidade) async {
     final db = await DatabaseHelper.instance.database;
 
     await db.insert(
@@ -17,26 +17,23 @@ class QuizService {
       {
         'nome': nome,
         'tema': tema,
-        'nivel': nivel,
         'valor': valor,
       },
     );
 
     int quant = int.parse(quantidade);
 
-    criarPerguntasGenericas(nivel, valor, quant);
+    criarPerguntasGenericas(valor, quant);
     await associarUsuarioAoQuiz();
   }
 
-  Future<void> criarPerguntasGenericas(
-      int nivel, int valor, int quantidade) async {
+  Future<void> criarPerguntasGenericas(int valor, int quantidade) async {
     final db = await DatabaseHelper.instance.database;
     for (int i = 1; i <= quantidade; i++) {
       int perguntaId = await db.insert(
         'Pergunta',
         {
-          'pergunta': 'Pergunta genérica $i para nível $nivel',
-          'nivel': nivel,
+          'pergunta': 'Pergunta genérica $i',
           'id_resposta_correta': null,
           'valor': valor,
           'id_quiz': await db
