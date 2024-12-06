@@ -23,17 +23,48 @@ class QuizService {
 
     int quant = int.parse(quantidade);
 
-    criarPerguntasGenericas(valor, quant);
+    List<String> perguntas = [
+      'What is the purpose of a hash table in data structures?',
+      'What is the time complexity of binary search algorithm?',
+      'What data structure is typically used for implementing a queue?'
+    ];
+
+    List<String> alternativas = [
+      'To sort elements in ascending order',
+      'To store key-value pairs for efficient retrieval',
+      'To perform mathematical operations on data',
+      'To create linked lists',
+      'O(n)',
+      'O(log n)',
+      'O(n^2)',
+      'O(1)',
+      'Array',
+      'Linked List',
+      'Stack',
+      'Tree'
+    ];
+
+    List<String> alternativasCorretas = ['B', 'B', 'B'];
+
+    criarPerguntasGenericas(
+        valor, quant, perguntas, alternativas, alternativasCorretas);
     await associarUsuarioAoQuiz();
   }
 
-  Future<void> criarPerguntasGenericas(int valor, int quantidade) async {
+  Future<void> criarPerguntasGenericas(
+      int valor,
+      int quantidade,
+      List<String> perguntas,
+      List<String> alternativas,
+      List<String> alternativasCorretas) async {
     final db = await DatabaseHelper.instance.database;
-    for (int i = 1; i <= quantidade; i++) {
+    int controleIndexAlternativas = 0;
+    int controleIndexAlternativaCorreta = 0;
+    for (int i = 0; i < quantidade; i++) {
       int perguntaId = await db.insert(
         'Pergunta',
         {
-          'pergunta': 'Pergunta genérica $i',
+          'pergunta': perguntas[i],
           'id_resposta_correta': null,
           'valor': valor,
           'id_quiz': await db
@@ -42,19 +73,24 @@ class QuizService {
         },
       );
 
-      int alternativaCorretaId = -1;
+      int indexAlternativaCorreta =
+          alternativasCorretas[controleIndexAlternativaCorreta].codeUnitAt(0) -
+              64;
+      int alternativaCorretaId = 0;
+
       for (int j = 1; j <= 4; j++) {
         int alternativaId = await db.insert(
           'Alternativas',
           {
             'pergunta_id': perguntaId,
-            'conteudo': 'Alternativa $j para Pergunta $i',
+            'conteudo': alternativas[controleIndexAlternativas],
           },
         );
 
-        if (j == 1) {
+        if (j == indexAlternativaCorreta) {
           alternativaCorretaId = alternativaId;
         }
+        controleIndexAlternativas++;
       }
 
       await db.update(
@@ -63,6 +99,8 @@ class QuizService {
         where: 'pergunta_id = ?',
         whereArgs: [perguntaId],
       );
+
+      controleIndexAlternativaCorreta++;
     }
   }
 
