@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:estudeai/Views/Calendario/calendario.dart';
 import 'package:estudeai/Views/Home/home.dart';
 import 'package:estudeai/Views/Perfil/perfil.dart';
@@ -47,15 +49,23 @@ class _QuizPageState extends State<QuizPage> {
     _loadUserQuizzes();
   }
 
-  String resposta =
-      "{\n    \"pergunta-1\": {\n        \"pergunta\": \"What is the purpose of a hash table in data structures?\",\n        \"alternativa-A\": \"To sort elements in ascending order\",\n        \"alternativa-B\": \"To store key-value pairs for efficient retrieval\",\n        \"alternativa-C\": \"To perform mathematical operations on data\",\n        \"alternativa-D\": \"To create linked lists\",\n        \"alternativa-correta\": \"B\"\n    },\n    \"pergunta-2\": {\n        \"pergunta\": \"What is the time complexity of binary search algorithm?\",\n        \"alternativa-A\": \"O(n)\",\n        \"alternativa-B\": \"O(log n)\",\n        \"alternativa-C\": \"O(n^2)\",\n        \"alternativa-D\": \"O(1)\",\n        \"alternativa-correta\": \"B\"\n    },\n    \"pergunta-3\": {\n        \"pergunta\": \"What data structure is typically used for implementing a queue?\",\n        \"alternativa-A\": \"Array\",\n        \"alternativa-B\": \"Linked List\",\n        \"alternativa-C\": \"Stack\",\n        \"alternativa-D\": \"Tree\",\n        \"alternativa-correta\": \"B\"\n    }\n}";
+  String requisicao = "{\n    \"pergunta-1\": {\n        \"pergunta\": \"What is the purpose of a hash table in data structures?\",\n        \"alternativa-A\": \"To sort elements in ascending order\",\n        \"alternativa-B\": \"To store key-value pairs for efficient retrieval\",\n        \"alternativa-C\": \"To perform mathematical operations on data\",\n        \"alternativa-D\": \"To create linked lists\",\n        \"alternativa-correta\": \"B\"\n    },\n    \"pergunta-2\": {\n        \"pergunta\": \"What is the time complexity of binary search algorithm?\",\n        \"alternativa-A\": \"O(n)\",\n        \"alternativa-B\": \"O(log n)\",\n        \"alternativa-C\": \"O(n^2)\",\n        \"alternativa-D\": \"O(1)\",\n        \"alternativa-correta\": \"B\"\n    },\n    \"pergunta-3\": {\n        \"pergunta\": \"What data structure is typically used for implementing a queue?\",\n        \"alternativa-A\": \"Array\",\n        \"alternativa-B\": \"Linked List\",\n        \"alternativa-C\": \"Stack\",\n        \"alternativa-D\": \"Tree\",\n        \"alternativa-correta\": \"B\"\n    }\n}";
 
   List<Map<String, dynamic>> quizzes = [];
   final TextEditingController nameController = TextEditingController();
   final TextEditingController themeController = TextEditingController();
-  final TextEditingController questionsCountController =
-      TextEditingController();
+  final TextEditingController questionsCountController = TextEditingController();
+  List<String> perguntas = [];
+  List<String> alternativas = [];
+  List<String> alternativasCorretas = [];
+
+
   final quizHelper = QuizService.instance;
+
+  void _requisicao() async {
+    //Faz requisicao
+    //Altere valor do atributo requisicao com a resposta retornada pela API do ChatGPT
+  }
 
   void _loadUserQuizzes() async {
     final userId = SessionManager().userId as int;
@@ -65,12 +75,31 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
+  void _decode_json() {
+    Map<String, dynamic> jsonData = json.decode(requisicao);
+    // Itera sobre cada pergunta no JSON
+    jsonData.forEach((key, value) {
+      perguntas.add(value['pergunta']);
+
+      // Adiciona as alternativas à lista
+      alternativas.add(value['alternativa-A']);
+      alternativas.add(value['alternativa-B']);
+      alternativas.add(value['alternativa-C']);
+      alternativas.add(value['alternativa-D']);
+
+      // Adiciona a alternativa correta
+      alternativasCorretas.add(value['alternativa-correta']);
+    });
+  }
+
   void _createQuiz() async {
+    _decode_json();
+    print(alternativas);
     if (nameController.text.isNotEmpty &&
         themeController.text.isNotEmpty &&
         questionsCountController.text.isNotEmpty) {
       await quizHelper.createQuiz(nameController.text, themeController.text, 10,
-          questionsCountController.text);
+          questionsCountController.text, perguntas, alternativas, alternativasCorretas);
       _loadUserQuizzes();
       nameController.clear();
       themeController.clear();

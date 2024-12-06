@@ -9,9 +9,11 @@ class QuizService {
   QuizService._init();
 
   Future<void> createQuiz(
-      String nome, String tema, int valor, String quantidade) async {
-    final db = await DatabaseHelper.instance.database;
+      String nome, String tema, int valor, String quantidade, 
+      List<String> perguntas, List<String> alternativas, 
+      List<String> alternativasCorretas) async {
 
+    final db = await DatabaseHelper.instance.database;
     await db.insert(
       'Quizzes',
       {
@@ -22,33 +24,10 @@ class QuizService {
     );
 
     int quant = int.parse(quantidade);
-
-    List<String> perguntas = [
-      'What is the purpose of a hash table in data structures?',
-      'What is the time complexity of binary search algorithm?',
-      'What data structure is typically used for implementing a queue?'
-    ];
-
-    List<String> alternativas = [
-      'To sort elements in ascending order',
-      'To store key-value pairs for efficient retrieval',
-      'To perform mathematical operations on data',
-      'To create linked lists',
-      'O(n)',
-      'O(log n)',
-      'O(n^2)',
-      'O(1)',
-      'Array',
-      'Linked List',
-      'Stack',
-      'Tree'
-    ];
-
-    List<String> alternativasCorretas = ['B', 'B', 'B'];
-
     criarPerguntasGenericas(
         valor, quant, perguntas, alternativas, alternativasCorretas);
     await associarUsuarioAoQuiz();
+
   }
 
   Future<void> criarPerguntasGenericas(
