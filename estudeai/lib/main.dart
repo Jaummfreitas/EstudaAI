@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:estudeai/Views/Service/db_helper.dart';
+import 'package:estudeai/Views/Service/openai-api-helper.dart';
 import 'package:estudeai/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ void main() async {
   await DatabaseHelper.instance.database;
   print('Firebase foi inicializado com sucesso!');
   printDatabasePath();
+  await testConnection();
   runApp(const MyApp());
 }
 

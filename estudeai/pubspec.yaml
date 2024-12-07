@@ -30,3 +30,4 @@ flutter:
   assets:
     - assets/images/verified.png
     - assets/images/default.png
+    - assets/openai-token.txt
