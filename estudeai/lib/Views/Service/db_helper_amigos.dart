@@ -45,18 +45,18 @@ class Amigos {
 }
 
 class AmigosDatabaseHelper {
-  static final AmigosDatabaseHelper instance = AmigosDatabaseHelper._init();
+static final AmigosDatabaseHelper instance = AmigosDatabaseHelper._init();
 
-  AmigosDatabaseHelper._init();
+AmigosDatabaseHelper._init();
 
-  Future<Database> get database async {
-    return await DatabaseHelper.instance.database;
-  }
+Future<Database> get database async {
+  return await DatabaseHelper.instance.database;
+}
 
-  Future<int> insertFriend(Amigos amigo) async {
-    final db = await database;
-    return await db.insert('Amigos', amigo.toMap());
-  }
+Future<int> insertFriend(Amigos amigo) async {
+  final db = await database;
+  return await db.insert('Amigos', amigo.toMap());
+}
 
   Future<List<Amigos>> fetchFriends() async {
     final db = await database;
@@ -69,24 +69,35 @@ class AmigosDatabaseHelper {
     return result.map((json) => Amigos.fromMap(json)).toList();
   }
 
-  Future<int> deleteFriend(int id) async {
-    final db = await database;
-    return await db.delete(
-      'Amigos',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+Future<int> deleteFriend(int id) async {
+  final db = await database;
+  return await db.delete(
+    'Amigos',
+    where: 'id = ?',
+    whereArgs: [id],
+  );
+}
 
-  Future<void> updateFriend(Amigos amigo) async {
-    final db = await database;
-    await db.update(
-      'Amigos',
-      amigo.toMap(),
-      where: 'id = ?',
-      whereArgs: [amigo.id],
-    );
-  }
+Future<void> updateFriend(Amigos amigo) async {
+  final db = await database;
+  await db.update(
+    'Amigos',
+    amigo.toMap(),
+    where: 'id = ?',
+    whereArgs: [amigo.id],
+  );
+}
 
+Future<bool> checkFriendship(int userId1, int userId2) async {
+  final db = await database;
 
+  // Verifica em ambas as direções (userId1 -> userId2 e userId2 -> userId1)
+  final List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT * FROM Amigos 
+    WHERE (user_id_1 = ? AND user_id_2 = ?) 
+    OR (user_id_1 = ? AND user_id_2 = ?)
+  ''', [userId1, userId2, userId2, userId1]);
+
+  return result.isNotEmpty;
+}
 }
