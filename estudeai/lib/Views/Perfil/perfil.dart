@@ -213,10 +213,10 @@ Widget build(BuildContext context) {
                       );
                     },
                     child: const ProfileWidget(
-                      icon: Icons.settings,
-                      title: 'Configurações',
+                      icon: Icons.info_outline, 
+                      title: 'Sobre o app',
                     ),
-                  ),
+                    ),
                   InkWell(
                     onTap: () {
                       Navigator.push(
