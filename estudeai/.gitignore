@@ -41,6 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+assets/openai-token.txt
 
 # Android related
 **/android/**/gradle-wrapper.jar
