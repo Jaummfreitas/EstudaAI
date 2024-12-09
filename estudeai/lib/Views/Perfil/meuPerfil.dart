@@ -26,7 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    loadImageFromAssetsAndUpload();
     _fetchUserData();
   }
 
@@ -275,8 +274,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ElevatedButton(
                 onPressed: () async {
                   // Certifique-se de que _image2 não é nulo antes de chamar uploadImageToFirebase
-                  if (_image2 != null) {
-                    await uploadImageToFirebase(_image2);
+                  if (_image != null) {
+                    await uploadImageToFirebase(_image);
                   } else {
                     print("No image selected to upload");
                   }
