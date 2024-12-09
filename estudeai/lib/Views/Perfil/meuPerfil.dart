@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:estudeai/Views/Service/UsuarioService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as p;
+import 'package:estudeai/Views/Perfil/perfil.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -22,37 +23,11 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController passwordController = TextEditingController();
   File? _image;
   File? _image2;
-  String? imagemUrl;
 
   @override
   void initState() {
     super.initState();
-    _initializeProfilePage();
     _fetchUserData();
-  }
-
-  void _initializeProfilePage() async {
-    String? url = await retrieveImageFromFirebase(idUsuario.toString());
-    setState(() {
-      imagemUrl = url;
-    });
-  }
-
-  Future<String?> retrieveImageFromFirebase(String userId) async {
-    try {
-      // Referência ao arquivo no bucket
-      final storageRef =
-          FirebaseStorage.instance.ref().child("images/$userId.png");
-
-      // Obtém a URL de download
-      String downloadUrl = await storageRef.getDownloadURL();
-      print("Image URL: $downloadUrl");
-
-      return downloadUrl;
-    } catch (e) {
-      print("Error retrieving image: $e");
-      return null;
-    }
   }
 
   Future<void> uploadImageToFirebase(File? imageFile) async {
@@ -150,7 +125,11 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pop(context);
+      
+      Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
     } catch (e) {
       print("Erro ao atualizar dados do usuário: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -180,10 +159,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    final backgroundImage = imagemUrl != null
-        ? NetworkImage(imagemUrl!)
-        : const AssetImage('assets/images/default.png') as ImageProvider;
 
     return Scaffold(
       appBar: AppBar(
@@ -218,7 +193,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: CircleAvatar(
                   radius: 60,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: backgroundImage,
+                  backgroundImage: _image != null ? FileImage(_image!) : null,
                 ),
               ),
               const SizedBox(height: 10),
@@ -295,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
               TextField(
                 controller: passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Nova Senha',
+                  labelText: 'Senha',
                   hintText: 'Nova senha',
                 ),
                 obscureText: true,
