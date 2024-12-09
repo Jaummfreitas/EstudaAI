@@ -1,11 +1,17 @@
 class SessionManager {
-  static final SessionManager _instance = SessionManager._internal();
+static final SessionManager _instance = SessionManager._internal();
 
-  factory SessionManager() {
-    return _instance;
-  }
+factory SessionManager() {
+  return _instance;
+}
 
-  SessionManager._internal();
+SessionManager._internal();
 
-  int? userId;
+int? _userId;  
+
+int? get userId => _userId;
+
+set userId(int? value) {
+  _userId = value;
+}
 }

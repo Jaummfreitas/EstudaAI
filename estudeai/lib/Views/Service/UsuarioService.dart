@@ -20,23 +20,35 @@ class UsuarioService {
     );
   }
 
-  Future<Map<String, dynamic>?> obterPorNome(String nome) async {
+  Future<Map<String, dynamic>?> obterPorNome(String nome,
+      {bool isSearch = false}) async {
     final db = await DatabaseHelper.instance.database;
 
-    final result = await db.query(
-      'User',
-      where: 'user_name = ?',
-      whereArgs: [nome],
-    );
+    try {
+      final result = await db.query(
+        'User',
+        where: 'user_name = ?',
+        whereArgs: [nome],
+      );
 
-    if (result.isNotEmpty) {
-      final user = result.first;
-      SessionManager().userId = user['user_id'] as int?;
-      print(SessionManager().userId);
-      return user;
-    } else {
+      if (result.isNotEmpty) {
+        final user = result.first;
+
+        if (!isSearch) {
+          SessionManager().userId = user['user_id'] as int?;
+        }
+
+        return user;
+      }
+      return null;
+    } catch (e) {
+      print('Erro ao obter usuário: $e');
       return null;
     }
+  }
+
+  Future<Map<String, dynamic>?> buscarAmigo(String nome) async {
+    return await obterPorNome(nome, isSearch: true);
   }
 
   Future<String> obterNomePorId(int id) async {
@@ -73,7 +85,6 @@ class UsuarioService {
     }
   }
 
-  /// Atualiza o nome do usuário
   Future<void> atualizarNome(int userId, String novoNome) async {
     final db = await DatabaseHelper.instance.database;
 
@@ -85,7 +96,6 @@ class UsuarioService {
     );
   }
 
-  /// Atualiza o email do usuário
   Future<void> atualizarEmail(int userId, String novoEmail) async {
     final db = await DatabaseHelper.instance.database;
 
@@ -97,7 +107,6 @@ class UsuarioService {
     );
   }
 
-  /// Atualiza a senha do usuário
   Future<void> atualizarSenha(int userId, String novaSenha) async {
     final db = await DatabaseHelper.instance.database;
 
@@ -110,19 +119,35 @@ class UsuarioService {
   }
 
   Future<Map<String, dynamic>?> obterPorNomePorId(int userId) async {
-  final db = await DatabaseHelper.instance.database;
+    final db = await DatabaseHelper.instance.database;
 
-  final result = await db.query(
-    'User',
-    where: 'user_id = ?',
-    whereArgs: [userId],
-  );
+    final result = await db.query(
+      'User',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
 
-  if (result.isNotEmpty) {
-    return result.first;
-  } else {
-    return null;
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
   }
-}
 
+  Future<String> obterEmailPorId(int id) async {
+    final db = await DatabaseHelper.instance.database;
+
+    final result = await db.query(
+      'User',
+      where: 'user_id = ?',
+      whereArgs: [id],
+    );
+
+    if (result.isNotEmpty) {
+      final user = result.first;
+      return user['user_email'] as String? ?? '';
+    } else {
+      return '';
+    }
+  }
 }
