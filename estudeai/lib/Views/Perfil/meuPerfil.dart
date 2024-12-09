@@ -22,11 +22,37 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController passwordController = TextEditingController();
   File? _image;
   File? _image2;
+  String? imagemUrl;
 
   @override
   void initState() {
     super.initState();
+    _initializeProfilePage();
     _fetchUserData();
+  }
+
+  void _initializeProfilePage() async {
+    String? url = await retrieveImageFromFirebase(idUsuario.toString());
+    setState(() {
+      imagemUrl = url;
+    });
+  }
+
+  Future<String?> retrieveImageFromFirebase(String userId) async {
+    try {
+      // Referência ao arquivo no bucket
+      final storageRef =
+          FirebaseStorage.instance.ref().child("images/$userId.png");
+
+      // Obtém a URL de download
+      String downloadUrl = await storageRef.getDownloadURL();
+      print("Image URL: $downloadUrl");
+
+      return downloadUrl;
+    } catch (e) {
+      print("Error retrieving image: $e");
+      return null;
+    }
   }
 
   Future<void> uploadImageToFirebase(File? imageFile) async {
@@ -155,6 +181,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    final backgroundImage = imagemUrl != null
+        ? NetworkImage(imagemUrl!)
+        : const AssetImage('assets/images/default.png') as ImageProvider;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -188,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: CircleAvatar(
                   radius: 60,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: _image != null ? FileImage(_image!) : null,
+                  backgroundImage: backgroundImage,
                 ),
               ),
               const SizedBox(height: 10),
@@ -265,7 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
               TextField(
                 controller: passwordController,
                 decoration: const InputDecoration(
-                  labelText: 'Senha',
+                  labelText: 'Nova Senha',
                   hintText: 'Nova senha',
                 ),
                 obscureText: true,
