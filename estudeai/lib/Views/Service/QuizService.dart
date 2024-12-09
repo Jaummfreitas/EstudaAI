@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class QuizService {
   static final QuizService instance = QuizService._init();
-  int idUsuario = SessionManager().userId!;
+  int? idUsuario = SessionManager().userId;
 
   QuizService._init();
 
@@ -84,6 +84,7 @@ class QuizService {
   }
 
   Future<void> associarUsuarioAoQuiz() async {
+    idUsuario = SessionManager().userId;
     final db = await DatabaseHelper.instance.database;
 
     int quizId = await db
