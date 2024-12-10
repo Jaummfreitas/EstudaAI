@@ -18,4 +18,31 @@ O **Estuda AI** é uma ferramenta inovadora projetada para transformar a maneira
 ### Público Alvo:
 Nosso projeto é direcionado a **estudantes de todas as idades**.
 
+### Funcionalidades:
+
+1. **Calendário Interativo**
+
+- Permite aos usuários criar e gerenciar eventos e tarefas.
+
+- Visualização semanal e mensal para melhor organização.
+
+2. **Ferramentas de Estudo**
+
+- Interface intuitiva para criação de planos de estudo personalizados.
+
+3. **Quizzes Personalizáveis**
+
+- Geração automática de quizzes personalizados com integração ao ChatGPT.
+
+- Histórico de desempenho para revisão futura.
+
+**Tecnologias Utilizadas**
+
+- Frontend: Flutter
+
+- Backend: Firebase
+
+- Integração com IA: OpenAI GPT
+
+- Banco de Dados: Firestore
 ---
